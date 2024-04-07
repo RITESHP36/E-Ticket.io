@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { QRCode } from "react-qr-svg"; // Import QRCode from react-qr-svg
+import QRCode  from "qrcode.react"; // Import QRCode from qrcode.react
 
 const Ticket = memo(({ name, uuid }) => {
 	console.log("Ticket", { name, uuid });
@@ -22,7 +22,7 @@ const Ticket = memo(({ name, uuid }) => {
 						{/* Use QRCode component from react-qr-svg */}
 						<QRCode
 							level="L"
-							style={{ width: 400 }}
+							style={{ width: 400 ,height:400}}
 							value={JSON.stringify({
 								name: name,
 								uuid: uuid,

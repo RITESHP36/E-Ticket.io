@@ -10,7 +10,7 @@ const Admin = () => {
 			<AdminDashboard />
 			<AdminAllTicket />
 			{/* <AdminTicketGenerate /> */}
-			{/* <Ticket name="Ritesh Pradhan" uuid="2b3d0ef4-0a4e-443d-b742-8e23e01e84f2" /> */}
+			{/* <Ticket name="ritesh pradhan" uuid="d9219e1e-e2ae-4f09-b0d4-4f9fc355d30e" /> */}
 		</div>
 	);
 };
