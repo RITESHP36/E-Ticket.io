@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import QRCode  from "qrcode.react"; // Import QRCode from qrcode.react
+import {QRCode}  from "react-qr-code"; // Import QRCode from qrcode.react
 
 const Ticket = memo(({ name, uuid }) => {
 	console.log("Ticket", { name, uuid });
