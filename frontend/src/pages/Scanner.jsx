@@ -1,69 +1,84 @@
-import React, { useState } from "react";
-import { QrReader } from "react-qr-reader";
-import { supabase } from "../components/createClient";
+import React, { useEffect, useRef, useState } from "react";
+import QrScanner from "qr-scanner";
+import QrFrame from "../assets/qr-frame.svg";
+import "./QrStyles.css";
 
 const Scanner = () => {
-  const [result, setResult] = useState("");
-  const [ticketVerified, setTicketVerified] = useState(false);
-  const [name, setName] = useState("");
-  const [showScanner, setShowScanner] = useState(false); // New state variable
+	const videoRef = useRef(null);
+	const scanner = useRef(null);
+	const qrBoxRef = useRef(null);
+	const [scannedResult, setScannedResult] = useState("");
+	const [qrOn, setQrOn] = useState(true);
 
-  const handleScan = async (data) => {
-    if (data) {
-      const [nameStr, uuidStr] = data.split(",");
-      const name = nameStr.split(":")[1].trim();
-      const uuid = uuidStr.split(":")[1].trim();
+	const onScanSuccess = (result) => {
+		console.log(result);
+		setScannedResult(result?.data);
+	};
 
-      const { data: ticketData, error } = await supabase
-        .from("tickets")
-        .select("name")
-        .eq("name", name)
-        .eq("uuid", uuid);
+	const onScanFail = (err) => {
+		console.error(err);
+	};
 
-      if (error) {
-        console.error("Error fetching ticket:", error);
-        setTicketVerified(false);
-        setResult("Ticket invalid");
-      } else {
-        if (ticketData.length > 0) {
-          setTicketVerified(true);
-          setName(name);
-          setResult(`Ticket verified, Welcome - ${name}`);
-        } else {
-          setTicketVerified(false);
-          setResult("Ticket invalid");
-        }
-      }
-    }
-  };
+	useEffect(() => {
+		if (videoRef.current && !scanner.current) {
+			scanner.current = new QrScanner(videoRef.current, onScanSuccess, {
+				onDecodeError: onScanFail,
+				preferredCamera: "environment",
+				highlightScanRegion: true,
+				highlightCodeOutline: true,
+				overlay: qrBoxRef.current || undefined,
+			});
 
-  const handleError = (err) => {
-    console.error(err);
-  };
+			scanner.current
+				.start()
+				.then(() => setQrOn(true))
+				.catch((err) => {
+					if (err) setQrOn(false);
+				});
+		}
 
-  const toggleScanner = () => {
-    setShowScanner(!showScanner);
-  };
+		return () => {
+			if (!videoRef.current) {
+				scanner.current?.stop();
+			}
+		};
+	}, []);
 
-  return (
-    <div className="flex flex-col items-center">
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-        onClick={toggleScanner}
-      >
-        {showScanner ? "Close Scanner" : "Open Scanner"}
-      </button>
-      {showScanner && (
-        <QrReader
-          delay={300}
-          onScan={handleScan}
-          onError={handleError}
-          style={{ width: "100%", maxWidth: "500px" }} // Limit width for better mobile view
-        />
-      )}
-      <p className="mt-4">{result}</p>
-    </div>
-  );
+	useEffect(() => {
+		if (!qrOn) {
+			alert(
+				"Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
+			);
+		}
+	}, [qrOn]);
+
+	return (
+		<div className="qr-reader">
+			<video ref={videoRef}></video>
+			<div ref={qrBoxRef} className="qr-box">
+				<img
+					src={QrFrame}
+					alt="Qr Frame"
+					width={256}
+					height={256}
+					className="qr-frame"
+				/>
+			</div>
+			{scannedResult && (
+				<p
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						zIndex: 99999,
+						color: "white",
+					}}
+				>
+					Scanned Result: {scannedResult}
+				</p>
+			)}
+		</div>
+	);
 };
 
 export default Scanner;
