@@ -66,8 +66,8 @@ const AdminDashboard = () => {
 	};
 
 	return (
-		<div className="AdminDashboard flex gap-10 h-screen">
-			<div className="w-1/2">
+		<div className=" flex gap-10 h-screen ">
+			<div className="w-1/2 mt-4 ml-4">
 				<div className="mb-4">
 					<input
 						type="text"

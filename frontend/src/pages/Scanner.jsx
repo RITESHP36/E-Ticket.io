@@ -8,37 +8,40 @@ const Scanner = () => {
 	const videoRef = useRef(null);
 	const scanner = useRef(null);
 	const qrBoxRef = useRef(null);
-	const [scannedResult, setScannedResult] = useState("");
 	const [qrOn, setQrOn] = useState(false);
-	const [ticketVerified, setTicketVerified] = useState(false);
+	const [ticketVerified, setTicketVerified] = useState(null);
 	const [name, setName] = useState("");
 	const [uuid, setUuid] = useState("");
 
 	const onScanSuccess = async (result) => {
 		console.log(result);
-		setScannedResult(result?.data);
 
-		const [nameStr, uuidStr] = result.data.split(",");
-		const scannedName = nameStr.split(":")[1].trim();
-		const scannedUuid = uuidStr.split(":")[1].trim();
+		try {
+			const qrData = JSON.parse(result.data);
+			const scannedName = qrData.name;
+			const scannedUuid = qrData.uuid;
 
-		const { data: ticketData, error } = await supabase
-			.from("tickets")
-			.select("name")
-			.eq("name", scannedName)
-			.eq("uuid", scannedUuid);
+			const { data: ticketData, error } = await supabase
+				.from("tickets")
+				.select("name")
+				.eq("name", scannedName)
+				.eq("uuid", scannedUuid);
 
-		if (error) {
-			console.error("Error fetching ticket:", error);
-			setTicketVerified(false);
-		} else {
-			if (ticketData.length > 0) {
-				setTicketVerified(true);
-				setName(scannedName);
-				setUuid(scannedUuid);
-			} else {
+			if (error) {
+				console.error("Error fetching ticket:", error);
 				setTicketVerified(false);
+			} else {
+				if (ticketData.length > 0) {
+					setTicketVerified(true);
+					setName(scannedName);
+					setUuid(scannedUuid);
+				} else {
+					setTicketVerified(false);
+				}
 			}
+		} catch (e) {
+			console.error("Error parsing QR code data:", e);
+			setTicketVerified(false);
 		}
 
 		stopScanner();
@@ -49,6 +52,7 @@ const Scanner = () => {
 	};
 
 	const startScanner = () => {
+		setTicketVerified(null);
 		if (!qrOn) {
 			if (videoRef.current && !scanner.current) {
 				scanner.current = new QrScanner(videoRef.current, onScanSuccess, {
@@ -66,6 +70,9 @@ const Scanner = () => {
 						console.error("Error starting scanner:", err);
 						setQrOn(false);
 					});
+			} else {
+				scanner.current.start();
+				setQrOn(true);
 			}
 		}
 	};
@@ -110,20 +117,30 @@ const Scanner = () => {
 						className="qr-frame"
 					/>
 				</div>
-				{scannedResult && (
-					<p>
-						Scanned Result: <br />
-						{scannedResult}
-					</p>
+				{ticketVerified === true && (
+					<div className="ticket-verified">
+						<div className="tick-animation">
+							<img
+								src="/tick-circle-svgrepo-com.svg"
+								alt="Tick"
+								style={{ fill: "green", width: "50px", height: "50px" }}
+							/>
+						</div>
+						<p className="ticket-verified-text">Ticket verified</p>
+					</div>
 				)}
-				{ticketVerified && (
-					<p>
-						Ticket verified, Welcome - {name}
-						<br />
-						UUID: {uuid}
-					</p>
+				{ticketVerified === false && (
+					<div className="ticket-invalid">
+						<div className="cross-animation">
+							<img
+								src="/cross-circle-svgrepo-com.svg"
+								alt="Cross"
+								style={{ fill: "red", width: "50px", height: "50px" }}
+							/>
+						</div>
+						<p className="ticket-invalid-text">Ticket invalid</p>
+					</div>
 				)}
-				{!ticketVerified && scannedResult && <p>Ticket invalid</p>}
 			</div>
 		</div>
 	);

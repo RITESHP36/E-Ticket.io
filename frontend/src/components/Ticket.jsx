@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import QRCode from "qrcode.react";
+import { QRCode } from "react-qr-svg"; // Import QRCode from react-qr-svg
 
 const Ticket = memo(({ name, uuid }) => {
 	console.log("Ticket", { name, uuid });
@@ -14,12 +14,20 @@ const Ticket = memo(({ name, uuid }) => {
 		>
 			<div className="flex justify-end">
 				<div className=""></div>
-				<div className="flex flex-col justify-center items-center mr-28 h-[500px]">
-					<p className="text-white font-bold text-lg text-center mb-4">
+				<div className="flex flex-col justify-center items-center mr-20 h-[500px]">
+					<p className="text-white font-bold text-3xl text-center mb-4 mt-10">
 						{name}
 					</p>
-					<div className="flex justify-center items-center">
-						<QRCode value={`Name: ${name}, UUID: ${uuid}`} size={200} />
+					<div className="flex justify-center items-center bg-white p-4">
+						{/* Use QRCode component from react-qr-svg */}
+						<QRCode
+							level="L"
+							style={{ width: 400 }}
+							value={JSON.stringify({
+								name: name,
+								uuid: uuid,
+							})}
+						/>
 					</div>
 				</div>
 			</div>

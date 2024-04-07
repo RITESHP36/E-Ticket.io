@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import GenerateTicket from "./pages/GenerateTicket";
 import Admin from "./pages/Admin";
 import Scanner from "./pages/Scanner";
+import AdminAllTicket from "./components/AdminAllTicket";
 
 const App = () => {
 	return (
@@ -12,8 +13,9 @@ const App = () => {
 			<Routes>
 				{/* <Route path="/generate-ticket/:name" element={<GenerateTicket />} /> */}
 				{/* <Route path="/" element={<Home />} /> */}
-        <Route path="/" element={<HomePage />} />
+				<Route path="/" element={<HomePage />} />
 				<Route path="/admin" element={<Admin />} />
+				<Route path="/admin/all-tickets" element={<AdminAllTicket />} />
 				<Route path="/scan" element={<Scanner />} />
 			</Routes>
 		</Router>
