@@ -20,7 +20,7 @@ const AdminDashboard = () => {
 	const fetchTickets = async () => {
 		const { data, error } = await supabase
 			.from("tickets")
-			.select("name, email, isGenerated, uuid");
+			.select("name, email, isGenerated, uuid , reg_no");
 
 		if (error) {
 			console.error("Error fetching tickets:", error);
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
 
 	return (
 		<div className=" flex gap-10 h-full ">
-			<div className="w-1/2 mt-4 ml-4">
+			<div className="w-2/3 mt-4 ml-4">
 				<div className="mb-4">
 					<input
 						type="text"
@@ -105,6 +105,9 @@ const AdminDashboard = () => {
 								Name
 							</th>
 							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Reg. No.
+							</th>
+							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Email
 							</th>
 							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -119,6 +122,7 @@ const AdminDashboard = () => {
 						{tickets.map((ticket, index) => (
 							<tr key={index}>
 								<td className="px-6 py-4 whitespace-nowrap">{ticket.name}</td>
+								<td className="px-6 py-4 whitespace-nowrap">{ticket.reg_no}</td>
 								<td className="px-6 py-4 whitespace-nowrap">{ticket.email}</td>
 								<td className="px-6 py-4 whitespace-nowrap text-center">
 									{ticket.isGenerated ? "Yes" : "No"}
@@ -139,7 +143,7 @@ const AdminDashboard = () => {
 												Update 
 											</button>
 											<button
-											onClick={() => handleCopyToClipboard("http://localhost:5173/token/" + ticket.name+ "/" + ticket.uuid)}
+											onClick={() => handleCopyToClipboard("http://kj-ticket.vercel.app/token/" + ticket.name+ "/" + ticket.uuid)}
 											className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer"
 										>
 											Copy Link
@@ -159,7 +163,7 @@ const AdminDashboard = () => {
 					</tbody>
 				</table>
 			</div>
-			<div className="w-1/2 ">
+			<div className="w-1/3 ">
 				{generatingTicket && (
 					<AdminTicketGenerateNew name={generatingTicket.name} />
 				)}
@@ -167,7 +171,7 @@ const AdminDashboard = () => {
 					<Ticket
 						name={viewingTicket.name}
 						uuid={viewingTicket.uuid}
-						width={900}
+						width={700}
 					/>
 				)}
 				{!generatingTicket && !viewingTicket && (
