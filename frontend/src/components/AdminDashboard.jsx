@@ -262,7 +262,10 @@ const AdminDashboard = () => {
 							uuid={viewingTicket.uuid}
 							width={700}
 						/>
-						<div className="flex justify-center items-center mt-10">
+						<p className="text-blue-600 text-lg font-semibold text-center mt-10">
+							Token Download  Qr Code 
+						</p>
+						<div className="flex justify-center items-center mt-4">
 							<QRCode
 								level="L"
 								style={{ width: "200px", height: "200px" }}
