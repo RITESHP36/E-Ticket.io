@@ -28,13 +28,18 @@ const PublicTokenDownloader = () => {
 			const link = document.createElement("a");
 			link.download = "ticket.png";
 			link.href = canvas.toDataURL("image/png");
+			// Append the link to the document
+			document.body.appendChild(link);
+			// Programmatically click the link to trigger the download
 			link.click();
+			// Remove the link when done
+			document.body.removeChild(link);
 		});
 	};
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 w-full">
-			<div className="rounded-lg" >
+			<div className="rounded-lg">
 				<Ticket ref={ticketRef} name={name} uuid={uuid} width={width} />
 			</div>
 		</div>

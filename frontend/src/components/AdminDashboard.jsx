@@ -269,7 +269,7 @@ const AdminDashboard = () => {
 							<QRCode
 								level="L"
 								style={{ width: "200px", height: "200px" }}
-								value={`https://kj-ticket.vercel.app/token/download/${viewingTicket.name}/${viewingTicket.uuid}`}
+								value={`https://kj-ticket.vercel.app/token/${viewingTicket.name}/${viewingTicket.uuid}`}
 							/>
 						</div>
 					</>
