@@ -7,7 +7,8 @@ import Admin from "./pages/Admin";
 import Scanner from "./pages/Scanner";
 import AdminAllTicket from "./components/AdminAllTicket";
 import PublicTokenViewer from "./pages/PublicTokenViewer";
-import {Toaster} from 'react-hot-toast';
+import PublicTokenDownloader from "./pages/PublicTokenDownloader";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
 	return (
@@ -21,6 +22,10 @@ const App = () => {
 				<Route path="/admin/all-tickets" element={<AdminAllTicket />} />
 				<Route path="/scan" element={<Scanner />} />
 				<Route path="/token/:name/:uuid" element={<PublicTokenViewer />} />
+				<Route
+					path="/token/download/:name/:uuid"
+					element={<PublicTokenDownloader />}
+				/>
 			</Routes>
 		</Router>
 	);

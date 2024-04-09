@@ -5,6 +5,7 @@ import AdminTicketViewer from "../trash/AdminTicketViewer"; // Import the AdminT
 import AdminTicketGenerateNew from "./AdminTicketGenerateNew";
 import Ticket from "./Ticket";
 import Toast from "react-hot-toast";
+import { QRCode } from "react-qr-code";
 
 const AdminDashboard = () => {
 	const [tickets, setTickets] = useState([]);
@@ -12,15 +13,25 @@ const AdminDashboard = () => {
 	const [viewingTicket, setViewingTicket] = useState(null);
 	const [newName, setNewName] = useState("");
 	const [newEmail, setNewEmail] = useState("");
+	const [newRegNo, setNewRegNo] = useState("");
+	const [editingTicket, setEditingTicket] = useState(null);
+	const [searchTerm, setSearchTerm] = useState("");
 
 	useEffect(() => {
 		fetchTickets();
 	}, []);
 
 	const fetchTickets = async () => {
-		const { data, error } = await supabase
+		let query = supabase
 			.from("tickets")
-			.select("name, email, isGenerated, uuid , reg_no");
+			.select("name, email, isGenerated, uuid , reg_no")
+			.order("name", { ascending: true }); // Order by name
+
+		if (searchTerm) {
+			query = query.ilike("name", `%${searchTerm}%`); // Filter by name if searchTerm is not empty
+		}
+
+		const { data, error } = await query;
 
 		if (error) {
 			console.error("Error fetching tickets:", error);
@@ -54,16 +65,39 @@ const AdminDashboard = () => {
 
 	const handleAddTicket = async () => {
 		if (newName.trim() && newEmail.trim()) {
-			const { data, error } = await supabase
-				.from("tickets")
-				.insert([{ name: newName, email: newEmail, isGenerated: false }]);
+			if (editingTicket) {
+				const { data, error } = await supabase
+					.from("tickets")
+					.update({ name: newName, email: newEmail, reg_no: newRegNo }) // Add reg_no to the update object
+					.eq("uuid", editingTicket.uuid);
 
-			if (error) {
-				console.error("Error inserting ticket:", error);
+				if (error) {
+					console.error("Error updating ticket:", error);
+				} else {
+					setNewName("");
+					setNewEmail("");
+					setNewRegNo("");
+					setEditingTicket(null);
+					fetchTickets();
+				}
 			} else {
-				setNewName("");
-				setNewEmail("");
-				fetchTickets();
+				const { data, error } = await supabase.from("tickets").insert([
+					{
+						name: newName,
+						email: newEmail,
+						reg_no: newRegNo,
+						isGenerated: false,
+					},
+				]);
+
+				if (error) {
+					console.error("Error inserting ticket:", error);
+				} else {
+					setNewName("");
+					setNewEmail("");
+					setNewRegNo("");
+					fetchTickets();
+				}
 			}
 		}
 	};
@@ -71,6 +105,22 @@ const AdminDashboard = () => {
 	const handleCopyToClipboard = (text) => {
 		navigator.clipboard.writeText(text);
 		Toast.success("Link copied to clipboard");
+	};
+
+	const handleEditTicket = (ticket) => {
+		setNewName(ticket.name);
+		setNewEmail(ticket.email);
+		setNewRegNo(ticket.reg_no);
+		setEditingTicket(ticket);
+	};
+
+	const handleDeleteTicket = async (name) => {
+		const { error } = await supabase.from("tickets").delete().eq("name", name);
+		if (error) {
+			console.error("Error deleting ticket:", error);
+		} else {
+			fetchTickets();
+		}
 	};
 
 	return (
@@ -91,11 +141,31 @@ const AdminDashboard = () => {
 						placeholder="Enter Email"
 						className="p-2 border rounded ml-2"
 					/>
+					<input
+						type="text"
+						value={newRegNo}
+						onChange={(e) => setNewRegNo(e.target.value)}
+						placeholder="Enter Reg. No."
+						className="p-2 border rounded ml-2"
+					/>
 					<button
 						onClick={handleAddTicket}
 						className="p-2 ml-2 bg-green-500 text-white rounded"
 					>
 						Add Ticket
+					</button>
+					<input
+						type="text"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						placeholder="Search by name"
+						className="p-2 border rounded ml-6"
+					/>
+					<button
+						onClick={fetchTickets}
+						className="p-2 ml-2 bg-blue-500 text-white rounded"
+					>
+						Search
 					</button>
 				</div>
 				<table className="w-full divide-y divide-gray-200">
@@ -110,9 +180,9 @@ const AdminDashboard = () => {
 							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Email
 							</th>
-							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							{/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Is Generated
-							</th>
+							</th> */}
 							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Action
 							</th>
@@ -124,38 +194,56 @@ const AdminDashboard = () => {
 								<td className="px-6 py-4 whitespace-nowrap">{ticket.name}</td>
 								<td className="px-6 py-4 whitespace-nowrap">{ticket.reg_no}</td>
 								<td className="px-6 py-4 whitespace-nowrap">{ticket.email}</td>
-								<td className="px-6 py-4 whitespace-nowrap text-center">
+								{/* <td className="px-6 py-4 whitespace-nowrap text-center">
 									{ticket.isGenerated ? "Yes" : "No"}
-								</td>
+								</td> */}
 								<td className="px-6 py-4 whitespace-nowrap">
 									{ticket.isGenerated ? (
 										<>
 											<button
 												onClick={() => handleShowTicket(ticket.uuid)}
-												className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												className=" border-2 border-blue-500 hover:bg-blue-600 hover:text-white text-blue-500 duration-200 font-bold py-1 px-2 rounded"
 											>
-												Show 
+												Show
 											</button>
 											<button
 												onClick={() => handleGenerateTicket(ticket.name)}
-												className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+												className="border-2 border-orange-500 hover:bg-orange-500 hover:text-white text-orange-500 duration-200 font-bold py-1 px-2 rounded ml-1"
 											>
-												Update 
+												Update
 											</button>
 											<button
-											onClick={() => handleCopyToClipboard("http://kj-ticket.vercel.app/token/" + ticket.name+ "/" + ticket.uuid)}
-											className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer"
-										>
-											Copy Link
-										</button>
+												onClick={() => handleEditTicket(ticket)}
+												className="border-2 border-yellow-500 hover:bg-yellow-600 hover:text-white text-yellow-500 duration-200 font-bold py-1 px-2 rounded ml-1"
+											>
+												Edit
+											</button>
+											<button
+												onClick={() => handleDeleteTicket(ticket.name)}
+												className="border-2 border-red-500 hover:bg-red-700 hover:text-white text-red-500 duration-200 font-bold py-1 px-2 rounded ml-1"
+											>
+												Delete
+											</button>
+											<button
+												onClick={() =>
+													handleCopyToClipboard(
+														`https://kj-ticket.vercel.app/token/${ticket.name}/${ticket.uuid}`
+													)
+												}
+												className="border-2 border-cyan-500 hover:bg-cyan-700 hover:text-white text-cyan-500 duration-200 font-bold py-1 px-2 rounded ml-1"
+											>
+												Copy Link
+											</button>
 										</>
 									) : (
-										<button
-											onClick={() => handleGenerateTicket(ticket.name)}
-											className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-										>
-											Generate Ticket
-										</button>
+										<>
+											<button
+												onClick={() => handleGenerateTicket(ticket.name)}
+												className="border-2 border-green-500 hover:bg-green-600 hover:text-white text-green-500 font-bold py-1 px-2 rounded ml-1"
+											>
+												Generate Ticket
+											</button>
+										</>
 									)}
 								</td>
 							</tr>
@@ -168,11 +256,20 @@ const AdminDashboard = () => {
 					<AdminTicketGenerateNew name={generatingTicket.name} />
 				)}
 				{viewingTicket && (
-					<Ticket
-						name={viewingTicket.name}
-						uuid={viewingTicket.uuid}
-						width={700}
-					/>
+					<>
+						<Ticket
+							name={viewingTicket.name}
+							uuid={viewingTicket.uuid}
+							width={700}
+						/>
+						<div className="flex justify-center items-center mt-10">
+							<QRCode
+								level="L"
+								style={{ width: "200px", height: "200px" }}
+								value={`https://kj-ticket.vercel.app/token/download/${viewingTicket.name}/${viewingTicket.uuid}`}
+							/>
+						</div>
+					</>
 				)}
 				{!generatingTicket && !viewingTicket && (
 					<div className="flex justify-center items-center h-full">

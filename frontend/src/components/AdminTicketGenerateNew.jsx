@@ -23,15 +23,15 @@ function AdminTicketGenerateNew({ name }) {
 		const uuidGenerated = uuidv4(); // Generate a unique UUID
 		setUuid(uuidGenerated); // Store the UUID in the state
 		// Upload the ticket to the database
-		uploadTicket(uuidGenerated, tempBase64Data, inputName);
+		uploadTicket(uuidGenerated, inputName);
 	};
 
-	const uploadTicket = async (uuid, base64, name) => {
+	const uploadTicket = async (uuid, name) => {
 		try {
 			// Assuming 'name' is a unique identifier for the row you want to update
 			const { data, error } = await supabase
 				.from("tickets") // Adjust the table name as necessary
-				.update({ uuid, isGenerated: true }) // Update the UUID, image_base64, and isGenerated fields
+				.update({ uuid, isGenerated: true }) // Update the UUID and isGenerated fields
 				.match({ name }); // Find the row where the name matches the provided name
 
 			if (error) {

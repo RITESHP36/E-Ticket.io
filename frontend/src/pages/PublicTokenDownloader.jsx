@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import Ticket from "../components/Ticket";
 import html2canvas from "html2canvas";
 
-const PublicTokenViewer = () => {
+const PublicTokenDownloader = () => {
 	const { name, uuid } = useParams();
 	const [width, setWidth] = useState(0);
 	const ticketRef = useRef(null);
 
 	useEffect(() => {
 		const handleResize = () => {
-			setWidth(window.innerWidth-20);
+			setWidth(window.innerWidth - 20);
 		};
 		handleResize(); // Initial call to set the width
 		window.addEventListener("resize", handleResize);
@@ -18,6 +18,10 @@ const PublicTokenViewer = () => {
 			window.removeEventListener("resize", handleResize);
 		};
 	}, []);
+
+	useEffect(() => {
+		handleDownload();
+	}, []); // Call handleDownload when the component mounts
 
 	const handleDownload = () => {
 		html2canvas(ticketRef.current).then((canvas) => {
@@ -30,21 +34,11 @@ const PublicTokenViewer = () => {
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 w-full">
-			<div
-				ref={ticketRef}
-				className="rounded-lg"
-				style={{ width: `${width}px` }}
-			>
-				<Ticket name={name} uuid={uuid} width={width} />
+			<div className="rounded-lg" >
+				<Ticket ref={ticketRef} name={name} uuid={uuid} width={width} />
 			</div>
-			<button
-				onClick={handleDownload}
-				className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-			>
-				Download Ticket
-			</button>
 		</div>
 	);
 };
 
-export default PublicTokenViewer;
+export default PublicTokenDownloader;
