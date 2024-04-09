@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./createClient";
+import { supabase } from "../components/createClient";
 
 const Home = () => {
 	const [name, setName] = useState("");

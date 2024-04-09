@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../components/createClient"; // Adjust the path as necessary
+import Ticket from "./Ticket";
 
 const AdminAllTicket = () => {
 	const [tickets, setTickets] = useState([]);
@@ -12,7 +13,7 @@ const AdminAllTicket = () => {
 	const fetchTickets = async () => {
 		const { data, error } = await supabase
 			.from("tickets")
-			.select("image_base64");
+			.select("name", "uuid");
 
 		if (error) {
 			console.error("Error fetching tickets:", error);
@@ -37,10 +38,15 @@ const AdminAllTicket = () => {
 			</div>
 
 			{showTickets && (
-				<div className="flex flex-wrap">
+				<div className="grid grid-cols-2">
 					{tickets.map((ticket, index) => (
-						<div key={index} className="w-1/2 p-2">
-							<img src={ticket.image_base64} alt={`Ticket ${index}`} />
+						<div key={index} className="mb-4 mr-4">
+							<Ticket
+								
+								name={ticket.name}
+								uuid={ticket.uuid}
+								width={1000}
+							/>
 						</div>
 					))}
 				</div>

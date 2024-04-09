@@ -3,12 +3,10 @@ import ReactDOM from "react-dom/client"; // Import ReactDOM
 import { v4 as uuidv4 } from "uuid";
 
 import Ticket from "./Ticket";
-import html2canvas from "html2canvas";
-import { supabase } from "../components/createClient";
+import { supabase } from "./createClient";
 
-function AdminTicketGenerate({ name }) {
+function AdminTicketGenerateNew({ name }) {
 	const [uuid, setUuid] = useState("");
-	const [base64Data, setBase64Data] = useState(""); // State for base64 string
 
 	// Use the name prop to set the initial state of the name state variable
 	const [inputName, setInputName] = useState(name);
@@ -24,45 +22,16 @@ function AdminTicketGenerate({ name }) {
 	const generateTicketNow = async () => {
 		const uuidGenerated = uuidv4(); // Generate a unique UUID
 		setUuid(uuidGenerated); // Store the UUID in the state
-
-		// Render the Ticket component in a hidden div to capture it
-		const hiddenDiv = document.createElement("div");
-		hiddenDiv.style.willReadFrequently = true; // Set the willReadFrequently attribute
-		document.body.appendChild(hiddenDiv);
-
-		// Use ReactDOM.createRoot to render the Ticket component
-		const root = ReactDOM.createRoot(hiddenDiv);
-		console.log("Name and UUID on generate side ", { inputName, uuid: uuidGenerated});
-		root.render(<Ticket name={inputName} uuid={uuidGenerated} />);
-
-		// Wait for the next render cycle to ensure the Ticket component is mounted
-		await new Promise((resolve) => setTimeout(resolve, 500));
-
-		// Generate the image of the ticket
-		html2canvas(hiddenDiv)
-			.then((canvas) => {
-				// Convert the canvas to a base64 string directly
-				const tempBase64Data = canvas.toDataURL("image/png");
-				setBase64Data(tempBase64Data); // Store the base64 string in the state
-
-				// Clean up the hidden div
-				document.body.removeChild(hiddenDiv);
-
-				// Upload the ticket to the database
-				uploadTicket(uuidGenerated, tempBase64Data, inputName);
-			})
-			.catch((error) => {
-				console.error("Error generating ticket image:", error);
-			});
+		// Upload the ticket to the database
+		uploadTicket(uuidGenerated, tempBase64Data, inputName);
 	};
 
 	const uploadTicket = async (uuid, base64, name) => {
-
 		try {
 			// Assuming 'name' is a unique identifier for the row you want to update
 			const { data, error } = await supabase
 				.from("tickets") // Adjust the table name as necessary
-				.update({ uuid, image_base64: base64, isGenerated: true }) // Update the UUID, image_base64, and isGenerated fields
+				.update({ uuid, isGenerated: true }) // Update the UUID, image_base64, and isGenerated fields
 				.match({ name }); // Find the row where the name matches the provided name
 
 			if (error) {
@@ -93,11 +62,11 @@ function AdminTicketGenerate({ name }) {
 					Generate Ticket
 				</button> */}
 			</form>
-			{base64Data && (
+			{uuid && (
 				<div className="mt-4">
 					{/* <p>UUID: {uuid}</p> */}
 					{/* display image based on imagebase64 */}
-					<img src={base64Data} alt="Generated Ticket" className="mt-4" />
+					<Ticket name={inputName} uuid={uuid} />
 					{/* Display the base64 string in a textarea */}
 					{/* <textarea
 						value={base64Data}
@@ -110,4 +79,4 @@ function AdminTicketGenerate({ name }) {
 	);
 }
 
-export default AdminTicketGenerate;
+export default AdminTicketGenerateNew;

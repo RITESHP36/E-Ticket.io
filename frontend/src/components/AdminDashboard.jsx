@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../components/createClient"; // Adjust the path as necessary
-import AdminTicketGenerate from "./AdminTicketGenerate"; // Import the AdminTicketGenerate component
-import AdminTicketViewer from "./AdminTicketViewer"; // Import the AdminTicketViewer component
+import AdminTicketGenerate from "../trash/AdminTicketGenerate"; // Import the AdminTicketGenerate component
+import AdminTicketViewer from "../trash/AdminTicketViewer"; // Import the AdminTicketViewer component
+import AdminTicketGenerateNew from "./AdminTicketGenerateNew";
+import Ticket from "./Ticket";
+import Toast from "react-hot-toast";
 
 const AdminDashboard = () => {
 	const [tickets, setTickets] = useState([]);
@@ -17,7 +20,7 @@ const AdminDashboard = () => {
 	const fetchTickets = async () => {
 		const { data, error } = await supabase
 			.from("tickets")
-			.select("name, email, isGenerated, uuid, image_base64");
+			.select("name, email, isGenerated, uuid");
 
 		if (error) {
 			console.error("Error fetching tickets:", error);
@@ -35,7 +38,7 @@ const AdminDashboard = () => {
 	const handleShowTicket = async (uuid) => {
 		const { data, error } = await supabase
 			.from("tickets")
-			.select("image_base64")
+			.select("name,uuid")
 			.eq("uuid", uuid);
 
 		if (error) {
@@ -65,8 +68,13 @@ const AdminDashboard = () => {
 		}
 	};
 
+	const handleCopyToClipboard = (text) => {
+		navigator.clipboard.writeText(text);
+		Toast.success("Link copied to clipboard");
+	};
+
 	return (
-		<div className=" flex gap-10 h-screen ">
+		<div className=" flex gap-10 h-full ">
 			<div className="w-1/2 mt-4 ml-4">
 				<div className="mb-4">
 					<input
@@ -122,14 +130,20 @@ const AdminDashboard = () => {
 												onClick={() => handleShowTicket(ticket.uuid)}
 												className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 											>
-												Show Ticket
+												Show 
 											</button>
 											<button
 												onClick={() => handleGenerateTicket(ticket.name)}
-												className="bg-orange-500 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+												className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
 											>
-												Update Ticket
+												Update 
 											</button>
+											<button
+											onClick={() => handleCopyToClipboard("http://localhost:5173/token/" + ticket.name+ "/" + ticket.uuid)}
+											className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2 cursor-pointer"
+										>
+											Copy Link
+										</button>
 										</>
 									) : (
 										<button
@@ -145,12 +159,16 @@ const AdminDashboard = () => {
 					</tbody>
 				</table>
 			</div>
-			<div className="w-1/2">
+			<div className="w-1/2 ">
 				{generatingTicket && (
-					<AdminTicketGenerate name={generatingTicket.name} />
+					<AdminTicketGenerateNew name={generatingTicket.name} />
 				)}
 				{viewingTicket && (
-					<AdminTicketViewer image_base64={viewingTicket.image_base64} />
+					<Ticket
+						name={viewingTicket.name}
+						uuid={viewingTicket.uuid}
+						width={900}
+					/>
 				)}
 				{!generatingTicket && !viewingTicket && (
 					<div className="flex justify-center items-center h-full">

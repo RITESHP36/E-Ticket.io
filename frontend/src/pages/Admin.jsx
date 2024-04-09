@@ -1,5 +1,5 @@
 import React from "react";
-import AdminTicketGenerate from "../components/AdminTicketGenerate";
+import AdminTicketGenerate from "../trash/AdminTicketGenerate";
 import AdminDashboard from "../components/AdminDashboard";
 import Ticket from "../components/Ticket";
 import AdminAllTicket from "../components/AdminAllTicket";
