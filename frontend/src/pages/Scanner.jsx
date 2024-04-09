@@ -127,7 +127,17 @@ const Scanner = () => {
 
 	return (
 		<div className="qr-reader">
-			<div className="flex flex-col items-center justify-center">
+			<div
+				className={`flex flex-col items-center justify-center ${
+					ticketVerified === null
+						? ""
+						: ticketVerified
+						? count > 1
+							? "bg-orange-500"
+							: "bg-green-500"
+						: "bg-red-400"
+				}`}
+			>
 				{!qrOn && !ticketVerified && (
 					<button
 						onClick={startScanner}
@@ -155,7 +165,9 @@ const Scanner = () => {
 					/>
 				</div>
 				{ticketVerified === true && (
-					<div className="ticket-verified flex flex-col justify-center items-center">
+					<div
+						className={`ticket-verified flex flex-col justify-center items-center `}
+					>
 						<div className="tick-animation flex justify-center items-center">
 							<svg
 								width="100px"
@@ -170,11 +182,11 @@ const Scanner = () => {
 								/>
 							</svg>
 						</div>
-						<p className="text-center text-green-500 font-semibold text-2xl pb-2">
+						<p className="text-center text-green-500 font-semibold text-2xl mb-2 bg-white  rounded-xl px-2">
 							Ticket verified
 						</p>
 						{/* <p className="text-center text-green-500 font-semibold text-2xl">{name}</p> */}
-						<table className="border-collapse border border-green-800 font-">
+						<table className="border-collapse border border-green-800 bg-white">
 							<thead>
 								<tr>
 									<th className="border-4 border-green-800 px-4 py-2">Name</th>
@@ -206,22 +218,21 @@ const Scanner = () => {
 							<tbody>
 								<tr className="font-bold">
 									<td
-										className="border-4 border-green-800 px-4 py-2 text-center text-2xl"
+										className={`border-4  px-4 py-2 text-center text-2xl  ${
+											count > 1
+												? "bg-red-500 border-red-800"
+												: "bg-green-500 border-green-800"
+										}`}
 										colSpan={2}
 									>
-										{/* if count >1 show in red else in green */}
-										{count > 1 ? (
-											<span className="text-red-500">{count}</span>
-										) : (
-											<span className="text-green-500">{count}</span>
-										)}
+										<span className="text-white">{count}</span>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 						{/* if the count value is >1 then show the user has exceed the max limits */}
 						{count > 1 && (
-							<p className="text-center text-red-500 font-bold text-lg p-2 mt-2 border-red-500 border-2 rounded-xl">
+							<p className="text-center text-red-500 font-bold text-2xl py-2 px-1 mt-4 border-red-500 border-4 rounded-xl bg-white mx-2">
 								User has exceeded the max limit
 							</p>
 						)}
@@ -232,16 +243,18 @@ const Scanner = () => {
 							Update Count
 						</button>
 						{/* imp info */}
-						<p className="text-center text-red-500 font-bold text-2xl pt-2">
-							Do not refresh the page 
-						</p>
-						<p className="text-center text-red-500 font-bold text-xl">
-							Click on Update Count button
-						</p>
+						<div className="bg-white rounded-xl p-2 mt-4 border-4 border-black mb-4">
+							<p className="text-center text-red-500 font-bold text-2xl pt-2">
+								Do not refresh the page
+							</p>
+							<p className="text-center text-red-500 font-bold text-xl">
+								Click on Update Count button
+							</p>
+						</div>
 					</div>
 				)}
 				{ticketVerified === false && (
-					<div className="ticket-invalid">
+					<div className="ticket-invalid h-screen">
 						<div className="cross-animation flex justify-center items-center">
 							<svg
 								width="100px"
@@ -275,7 +288,7 @@ const Scanner = () => {
 								</g>
 							</svg>
 						</div>
-						<p className="text-center font-bold text-2xl text-red-500">
+						<p className="text-center font-bold text-2xl text-red-500 bg-white border-red-700 border-4 p-3 mt-4 rounded-lg">
 							Ticket invalid
 						</p>
 					</div>
