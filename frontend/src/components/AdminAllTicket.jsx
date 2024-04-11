@@ -13,12 +13,13 @@ const AdminAllTicket = () => {
 	const fetchTickets = async () => {
 		const { data, error } = await supabase
 			.from("tickets")
-			.select("name,uuid");
+			.select("name,uuid,isGenerated");
 
 		if (error) {
 			console.error("Error fetching tickets:", error);
 		} else {
-			setTickets(data);
+			const generatedTickets = data.filter((ticket) => ticket.isGenerated);
+			setTickets(generatedTickets);
 		}
 	};
 
@@ -41,11 +42,7 @@ const AdminAllTicket = () => {
 				<div className="grid grid-cols-2">
 					{tickets.map((ticket, index) => (
 						<div key={index} className="mb-4 mr-4">
-							<Ticket
-								name={ticket.name}
-								uuid={ticket.uuid}
-								width={1000}
-							/>
+							<Ticket name={ticket.name} uuid={ticket.uuid} width={1000} />
 						</div>
 					))}
 				</div>

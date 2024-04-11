@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client"; // Import ReactDOM
 import { v4 as uuidv4 } from "uuid";
+import Toast from "react-hot-toast";
 
 import Ticket from "./Ticket";
 import { supabase } from "./createClient";
@@ -23,7 +24,12 @@ function AdminTicketGenerateNew({ name }) {
 		const uuidGenerated = uuidv4(); // Generate a unique UUID
 		setUuid(uuidGenerated); // Store the UUID in the state
 		// Upload the ticket to the database
-		uploadTicket(uuidGenerated, inputName);
+		const result = await uploadTicket(uuidGenerated, inputName);
+		if (result) {
+			Toast.success("Ticket generated successfully!");
+		} else {
+			Toast.error("Failed to generate ticket.");
+		}
 	};
 
 	const uploadTicket = async (uuid, name) => {
@@ -36,12 +42,15 @@ function AdminTicketGenerateNew({ name }) {
 
 			if (error) {
 				console.error("Error updating ticket:", error);
+				return false;
 			} else {
 				console.log("Ticket updated successfully for:", name, data);
 				// Optionally, perform additional actions upon successful update
+				return true;
 			}
 		} catch (error) {
 			console.error("Error updating ticket:", error);
+			return false;
 		}
 	};
 

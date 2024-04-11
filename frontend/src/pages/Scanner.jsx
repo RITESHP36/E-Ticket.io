@@ -166,7 +166,7 @@ const Scanner = () => {
 				</div>
 				{ticketVerified === true && (
 					<div
-						className={`ticket-verified flex flex-col justify-center items-center `}
+						className={`ticket-verified flex flex-col justify-center items-center h-screen`}
 					>
 						<div className="tick-animation flex justify-center items-center">
 							<svg

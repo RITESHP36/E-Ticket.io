@@ -4,10 +4,12 @@ import AdminDashboard from "../components/AdminDashboard";
 import Ticket from "../components/Ticket";
 import AdminAllTicket from "../components/AdminAllTicket";
 import AdminTicketStatus from "../components/AdminTicketStatus";
+import AddUsers from "../components/AdminAddUser";
 
 const Admin = () => {
 	return (
 		<div>
+			<AddUsers />
 			<AdminDashboard />
 			<AdminAllTicket />
 			<AdminTicketStatus />

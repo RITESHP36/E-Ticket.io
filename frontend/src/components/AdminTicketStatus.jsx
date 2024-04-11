@@ -59,7 +59,13 @@ const AdminTicketStatus = () => {
 						{data.map((item, index) => (
 							<div
 								key={index}
-								className="p-4 border rounded shadow-md shadow-yellow-500"
+								className={`p-4 border rounded shadow-md  ${
+									item.count === 0
+										? "shadow-blue-500"
+										: item.count === 1
+										? "shadow-green-500"
+										: "shadow-orange-500"
+								}`}
 							>
 								<p className="font-bold text-lg">Name: {item.name}</p>
 								<p className="text-gray-700 text-lg font-medium">Reg No: {item.reg_no}</p>
