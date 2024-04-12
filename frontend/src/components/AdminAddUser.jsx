@@ -153,7 +153,7 @@ const AddUsers = () => {
 	};
 
 	return (
-		<div className=" flex flex-col justify-center items-center pt-4 pb-6 border-t-2 border-b-2 border-gray-400">
+		<div className=" flex flex-col justify-center items-center pt-4 pb-6 border-t-2 border-b-2 border-gray-400" id="adduser">
 			{/* Add a button to toggle the visibility of the bulk user upload options */}
 			<button
 				onClick={() => setShowBulkUpload(!showBulkUpload)}

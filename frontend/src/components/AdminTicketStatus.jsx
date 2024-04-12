@@ -26,7 +26,7 @@ const AdminTicketStatus = () => {
 	}, []);
 
 	return (
-		<div className=" border-t-4 border-gray-300">
+		<div className=" border-t-4 border-gray-300" id="status">
 			<div className="flex justify-center items-center my-8">
 				<button
 					onClick={() => setShowStatus(!showStatus)}

@@ -51,6 +51,11 @@ const AdminDashboard = () => {
 	const handleGenerateTicket = (name) => {
 		setGeneratingTicket({ name });
 		setViewingTicket(null);
+
+		// Reset generatingTicket state after 1 second
+		setTimeout(() => {
+			setGeneratingTicket(null);
+		}, 2000);
 	};
 
 	const handleShowTicket = async (uuid) => {
@@ -135,8 +140,14 @@ const AdminDashboard = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (generatingTicket) {
+			setGeneratingTicket(null);
+		}
+	}, [generatingTicket]);
+
 	return (
-		<div className=" flex gap-10 h-full ">
+		<div className=" flex gap-10 h-full " id="generate">
 			<div className="w-2/3 mt-4 ml-4">
 				<div className="mb-4">
 					<input

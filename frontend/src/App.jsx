@@ -20,7 +20,6 @@ const App = () => {
 				<Route path="/" element={<HomePage />} />
 				<Route path="/admin" element={<Admin />} />
 				<Route path="/scan" element={<Scanner />} />
-				<Route path="/mail" element={<ManageMail />} />
 				<Route path="/token/:name/:uuid" element={<PublicTokenViewer />} />
 				{/* <Route
 					path="/token/download/:name/:uuid"

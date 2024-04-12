@@ -28,7 +28,7 @@ const AdminAllTicket = () => {
 	};
 
 	return (
-		<div>
+		<div id="alltickets">
 			<div className="flex justify-center items-center mb-4 border-t-4 border-gray-300 pt-4">
 				<button
 					onClick={toggleTicketsVisibility}
