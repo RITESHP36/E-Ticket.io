@@ -82,7 +82,12 @@ const AddUsers = () => {
 			Object.keys(row).forEach((key) => {
 				const supabaseField = getSupabaseField(key);
 				if (supabaseField) {
-					user[supabaseField] = row[key];
+					let value = row[key];
+					if (supabaseField === "name" || supabaseField === "reg_no") {
+						// Capitalize the name and reg_no
+						value = value.toString().toUpperCase();
+					}
+					user[supabaseField] = value;
 				}
 			});
 			return user;
@@ -153,7 +158,10 @@ const AddUsers = () => {
 	};
 
 	return (
-		<div className=" flex flex-col justify-center items-center pt-4 pb-6 border-t-2 border-b-2 border-gray-400" id="adduser">
+		<div
+			className=" flex flex-col justify-center items-center pt-4 pb-6 border-t-2 border-b-2 border-gray-400"
+			id="adduser"
+		>
 			{/* Add a button to toggle the visibility of the bulk user upload options */}
 			<button
 				onClick={() => setShowBulkUpload(!showBulkUpload)}

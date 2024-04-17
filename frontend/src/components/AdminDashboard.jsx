@@ -80,7 +80,7 @@ const AdminDashboard = () => {
 			if (editingTicket) {
 				const { data, error } = await supabase
 					.from("tickets")
-					.update({ name: newName, email: newEmail, reg_no: newRegNo }) // Add reg_no to the update object
+					.update({ name: newName.toUpperCase(), email: newEmail, reg_no: newRegNo.toUpperCase() })
 					.eq("uuid", editingTicket.uuid);
 
 				if (error) {
@@ -97,9 +97,9 @@ const AdminDashboard = () => {
 			} else {
 				const { data, error } = await supabase.from("tickets").insert([
 					{
-						name: newName,
+						name: newName.toUpperCase(), // Capitalize name
 						email: newEmail,
-						reg_no: newRegNo,
+						reg_no: newRegNo.toUpperCase(), // Capitalize reg_no
 						isGenerated: false,
 					},
 				]);

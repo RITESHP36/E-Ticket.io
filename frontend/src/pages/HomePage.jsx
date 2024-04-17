@@ -1,39 +1,26 @@
-import React from "react";
+import React from 'react';
 
 const HomePage = () => {
-	return (
-		<div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
-			<div className="text-center">
-				<h1 className="text-5xl font-bold mb-4 animate-pulse">
-					Utkal Diwas Ticket Distribution and Verification Portal
-				</h1>
-				<p className="text-2xl mb-8 animate-bounce">Coming Soon</p>
-				<div className="flex justify-center items-center mb-8">
-					<span className="mr-4 animate-spin">🎫</span>
-					<p className="text-lg">
-						Get ready to experience a seamless ticketing journey!
-					</p>
-				</div>
-				<div className="flex justify-center items-center mb-8">
-					<span className="mr-4 animate-ping">✨</span>
-					<p className="text-lg">
-						Stay tuned for exciting updates and features.
-					</p>
-				</div>
-				<div className="flex justify-center items-center">
-					<span className="mr-4 animate-bounce">🎉</span>
-					<p className="text-lg">
-						Join us in celebrating the rich cultural heritage of Odisha!
-					</p>
-				</div>
-			</div>
-			<div className="mt-16">
-				<p className="text-sm text-gray-300">
-					Developed by Technical@KalingaJyoti &copy; {new Date().getFullYear()}
-				</p>
-			</div>
-		</div>
-	);
+ return (
+   <div className="p-2 sm:p-6 bg-gradient-to-br from-yellow-500 via-red-400 to-orange-500 ">
+     <div className="bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg sm:p-6 p-4 text-white">
+       <h1 className="text-3xl font-bold mb-4 text-yellow-300">Jay Jagannath 🙏</h1>
+       <p className="mb-4">Dear Kalinga Jyoti Community,</p>
+       <p className="mb-4">Get ready to celebrate our heritage! Join us as we celebrate <span className='text-amber-300 font-medium'>Utkal Divas and Pana Sankranti</span>  with a joyous community event.</p>
+       <p className="mb-4">Immerse yourself in the spirit of Odisha with:</p>
+       <h2 className="text-xl font-bold mb-2 text-orange-300">Delicious Odia delicacies: Dahibara Aloodum & Bela Pana (Registration Required)</h2>
+       <p className="mb-4">Experience the taste of Odisha by registering for a chance to savor authentic Dahibara Aloodum and Bela Pana. Registration is essential, so secure your spot today!</p>
+       <p className="mb-4">Let's come together and celebrate the rich culture and traditions of Odisha.</p>
+       <p className="mb-4">A big thank you to those who have already registered! We look forward to sharing a wonderful experience with you all tomorrow.</p>
+       <p className="mb-4">See you there!</p>
+       <p className="mb-4">Warmly,</p>
+       <p>The Kalinga Jyoti Community Team</p>
+     </div>
+     <div className="mt-6">
+       <img src="event_poster.jpg" alt="Event Poster" className="rounded-lg shadow-lg w-full" />
+     </div>
+   </div>
+ );
 };
 
 export default HomePage;

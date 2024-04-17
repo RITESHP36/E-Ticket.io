@@ -85,7 +85,7 @@ const ManageMail = () => {
 		}));
 
 		fetch(
-			"https://sheet.best/api/sheets/ea9ccc14-5a1b-49e8-809e-c83220034f34",
+			"https://sheet.best/api/sheets/ced65f27-4d56-449c-963e-fa10548f2308",
 			{
 				method: "POST",
 				mode: "cors",
@@ -109,7 +109,7 @@ const ManageMail = () => {
 
 	const getExistingTicketsFromSpreadsheet = async () => {
 		const response = await fetch(
-			"https://sheet.best/api/sheets/ea9ccc14-5a1b-49e8-809e-c83220034f34?_raw=1"
+			"https://sheet.best/api/sheets/ced65f27-4d56-449c-963e-fa10548f2308?_raw=1"
 		);
 		const data = await response.json();
 		// filter out those data where name !== null
