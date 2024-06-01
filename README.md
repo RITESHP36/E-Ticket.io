@@ -8,6 +8,7 @@
   <p align="center">
     <br />
     <a href="https://your-digital-token-generation-link.com">View Demo</a>
+    <p>(Website might be down due when Supabase database is paused)<//p>
   </p>
 </div>
 
@@ -29,7 +30,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Digital Token Generation And Validation Screen Shot](https://i.ibb.co/y0Myqxx/image.png)
+![Project Snapshot1](https://github.com/RITESHP36/E-Ticket.io/assets/119559499/48b51d4f-ac25-4562-823e-0a73b5d77da5)
 ![Project Snapshot2](https://i.ibb.co/KhT7Vfs/image.png)
 ![Project Snapshot3](https://github.com/RITESHP36/E-Ticket.io/assets/119559499/48ac5d8b-db1f-406b-afa7-6198d67a2158)
 
