@@ -9,7 +9,7 @@ import ManageMail from "./ManageMail";
 
 const Admin = () => {
 	const [pin, setPin] = useState(Array(6).fill(""));
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const inputRefs = Array(6)
 		.fill()
 		.map(() => createRef());
