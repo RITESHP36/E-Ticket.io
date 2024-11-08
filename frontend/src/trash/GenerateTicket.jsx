@@ -52,7 +52,7 @@ const GenerateTicket = () => {
 			ref={ticketRef}
 			className="border border-black p-4"
 			style={{
-				backgroundImage: `url('/Navy Yellow Retro Night Party Ticket.png')`,
+				backgroundImage: `url('/Navy Yellow Retro Night Party Ticket.jpg')`,
 				backgroundSize: "cover",
 			}}
 		>

@@ -15,7 +15,7 @@ const Ticket = memo(({ name, uuid, width }) => {
 		<div
 			className="relative"
 			style={{
-				backgroundImage: `url('/Navy Yellow Retro Night Party Ticket.png')`,
+				backgroundImage: `url('/Navy Yellow Retro Night Party Ticket.jpg')`,
 				backgroundSize: "cover",
 				width: `${ticketWidth}px`, // Set width of ticket container
 				height: `${ticketWidth / 3}px`, // Set height based on width (3:1 ratio)
