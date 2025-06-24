@@ -7,7 +7,7 @@
 
   <p align="center">
     <br />
-    <a href="https://your-digital-token-generation-link.com">View Demo</a>
+    <a href="[https://your-digital-token-generation-link.com](https://kj-ticket.vercel.app/)">View Demo</a>
     <p>(Website might be down due when Supabase database is paused)<//p>
   </p>
 </div>
