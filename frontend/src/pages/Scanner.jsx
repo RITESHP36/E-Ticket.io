@@ -13,11 +13,11 @@ const Scanner = () => {
 	const [uuid, setUuid] = useState("");
 	const [reg_no, setReg_no] = useState("");
 	const [count, setCount] = useState(0);
-	const [ticketWidth, setTicketWidth] = useState(window.innerWidth - 20); // Initial width
+	const [ticketWidth, setTicketWidth] = useState(window.innerWidth - 20);
 	const [countIncremented, setCountIncremented] = useState(false);
 
 	const [pin, setPin] = useState(Array(6).fill(""));
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const inputRefs = Array(6)
 		.fill()
 		.map(() => createRef());

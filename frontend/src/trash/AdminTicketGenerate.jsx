@@ -64,7 +64,7 @@ function AdminTicketGenerate({ name }) {
 			// Assuming 'name' is a unique identifier for the row you want to update
 			const { data, error } = await supabase
 				.from("tickets") // Adjust the table name as necessary
-				.update({ uuid, image_base64: base64, isGenerated: true }) // Update the UUID, image_base64, and isGenerated fields
+				.update({ uuid, isGenerated: true }) // Update the UUID, image_base64, and isGenerated fields
 				.match({ name }); // Find the row where the name matches the provided name
 
 			if (error) {
