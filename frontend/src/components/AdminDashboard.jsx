@@ -321,7 +321,7 @@ const AdminDashboard = () => {
 												<button
 													onClick={() =>
 														handleCopyToClipboard(
-															`https://kj-tickets.vercel.app/token/${ticket.name}/${ticket.uuid}`
+															`https://kj-ticket.vercel.app/token/${ticket.name}/${ticket.uuid}`
 														)
 													}
 													className="border-2 border-cyan-500 hover:bg-cyan-700 hover:text-white text-cyan-500 duration-200 font-bold py-1 px-2 rounded ml-1"
@@ -369,7 +369,7 @@ const AdminDashboard = () => {
 							<QRCode
 								level="L"
 								style={{ width: "200px", height: "200px" }}
-								value={`https://kj-tickets.vercel.app/token/${viewingTicket.name}/${viewingTicket.uuid}`}
+								value={`https://kj-ticket.vercel.app/token/${viewingTicket.name}/${viewingTicket.uuid}`}
 							/>
 						</div>
 					</>
