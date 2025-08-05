@@ -9,6 +9,7 @@ import PublicTokenViewer from "./pages/PublicTokenViewer";
 import PublicTokenDownloader from "./pages/PublicTokenDownloader";
 import ManageMail from "./pages/ManageMail";
 import { Toaster } from "react-hot-toast";
+import DbPage from "./pages/DbView";
 
 const App = () => {
 	return (
@@ -18,6 +19,7 @@ const App = () => {
 				{/* <Route path="/generate-ticket/:name" element={<GenerateTicket />} /> */}
 				<Route path="/" element={<HomePage />} />
 				<Route path="/admin" element={<Admin />} />
+				<Route path="/table" element={<DbPage />} />
 				<Route path="/scan" element={<Scanner />} />
 				<Route path="/token/:name/:uuid" element={<PublicTokenViewer />} />
 				{/* <Route
